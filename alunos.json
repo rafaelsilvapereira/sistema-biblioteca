@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "nome": "Rafael",
+        "celular": "51983159402",
+        "email": "2"
+    },
+    {
+        "id": 2,
+        "nome": "Nilva",
+        "celular": "51034750130",
+        "email": "1"
+    },
+    {
+        "id": 3,
+        "nome": "Marli",
+        "celular": "51993105287",
+        "email": "teste@test"
+    },
+    {
+        "id": 4,
+        "nome": "Himura",
+        "celular": "51983159402",
+        "email": "1"
+    },
+    {
+        "id": 5,
+        "nome": "Eli",
+        "celular": "51983159402",
+        "email": "1"
+    }
+]
