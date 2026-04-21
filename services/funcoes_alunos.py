@@ -5,7 +5,7 @@ from config import ARQUIVO_ALUNOS
 import dados
 import utils.menus as menus
 import utils.utils as u
-import models.classe_Aluno as classe_Aluno
+import models.aluno as aluno
 
 # TITULO DOS MENUS
 
@@ -33,7 +33,7 @@ def cadastrar_aluno(sistema):
     email = u.input_texto('\nE-Mail: ')
 
     id = sistema.gerar_id_aluno()
-    aluno = classe_Aluno.Aluno(id, nome, celular, email)
+    aluno = aluno.Aluno(id, nome, celular, email)
     sistema.adicionar_aluno(aluno)
 
     salvar_json_alunos(sistema.alunos)
@@ -245,7 +245,7 @@ def carregar_json_alunos():
         with open(ARQUIVO_ALUNOS, "r", encoding="utf-8") as arquivo:
             dados = json.load(arquivo)
 
-            return [classe_Aluno.Aluno.from_dict(d) for d in dados]
+            return [aluno.Aluno.from_dict(d) for d in dados]
 
     except FileNotFoundError:
         return []

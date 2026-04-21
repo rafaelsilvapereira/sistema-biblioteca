@@ -1,7 +1,7 @@
 import dados
 import utils.menus as menus
 import utils.utils as u
-import models.classe_Sistema as classe_Sistema
+import models.sistema as sistema
 import services.funcoes_alunos as fa
 import services.funcoes_livros as fl
 
@@ -10,7 +10,7 @@ import services.funcoes_livros as fl
 # ========================================
 
 # Criar sistema
-sistema = classe_Sistema.SistemaBiblioteca()
+sistema = sistema.SistemaBiblioteca()
 
 # Carregar JSON Alunos e Livros
 sistema.alunos = fa.carregar_json_alunos()

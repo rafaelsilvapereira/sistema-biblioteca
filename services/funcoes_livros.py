@@ -7,7 +7,7 @@ from config import ARQUIVO_LIVROS
 import dados
 import utils.menus as menus
 import utils.utils as u
-import models.classe_Livro as classe_Livro
+import models.livro as livro
 
 # TITULO DOS MENUS
 
@@ -35,7 +35,7 @@ def cadastrar_livro(sistema):
     quantidade = u.input_inteiro('\nQuantidade: ')
 
     id = sistema.gerar_id_livro()
-    livro = classe_Livro.Livro(id, data_cadastro, nome, quantidade)
+    livro = livro.Livro(id, data_cadastro, nome, quantidade)
     livro.atualizar_status()
     sistema.adicionar_livro(livro)
 
@@ -214,7 +214,7 @@ def carregar_json_livros():
         with open(ARQUIVO_LIVROS, "r", encoding="utf-8") as arquivo:
             dados = json.load(arquivo)
 
-            return [classe_Livro.Livro.from_dict(d) for d in dados]
+            return [livro.Livro.from_dict(d) for d in dados]
 
     except FileNotFoundError:
         return []
