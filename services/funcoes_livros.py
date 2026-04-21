@@ -2,10 +2,12 @@ from datetime import datetime
 
 import json
 
+from config import ARQUIVO_LIVROS
+
 import dados
-import menus
-import utils as u
-import classe_Livro
+import utils.menus as menus
+import utils.utils as u
+import models.classe_Livro as classe_Livro
 
 # TITULO DOS MENUS
 
@@ -191,25 +193,51 @@ def verificar_cadastrar_livro(sistema):
 
     return True
 
-# SALVAR LIVRO JSON
+# SALVAR LIVRO JSON - Atualizada
 
 def salvar_json_livros(lista_livros):
-    with open("livros.json", "w", encoding="utf-8") as arquivo:
-        json.dump(
-            [livro.to_dict() for livro in lista_livros],
-            arquivo,
-            indent=4,
-            ensure_ascii=False
-        )
+    try:
+        with open(ARQUIVO_LIVROS, "w", encoding="utf-8") as arquivo:
+            json.dump(
+                [livro.to_dict() for livro in lista_livros],
+                arquivo,
+                indent=4,
+                ensure_ascii=False
+            )
+    except Exception as e:
+        print(f"Erro ao salvar livros: {e}")
 
-# CARREGAR LIVROS JSON
+# CARREGAR LIVROS JSON - Atualizada
 
 def carregar_json_livros():
     try:
-        with open("livros.json", "r", encoding="utf-8") as arquivo:
+        with open(ARQUIVO_LIVROS, "r", encoding="utf-8") as arquivo:
             dados = json.load(arquivo)
 
             return [classe_Livro.Livro.from_dict(d) for d in dados]
 
     except FileNotFoundError:
         return []
+
+# # SALVAR LIVRO JSON - Antes
+
+# def salvar_json_livros(lista_livros):
+#     with open("livros.json", "w", encoding="utf-8") as arquivo:
+#         json.dump(
+#             [livro.to_dict() for livro in lista_livros],
+#             arquivo,
+#             indent=4,
+#             ensure_ascii=False
+#         )
+
+# # CARREGAR LIVROS JSON - Antes
+
+# def carregar_json_livros():
+#     try:
+#         with open("livros.json", "r", encoding="utf-8") as arquivo:
+#             dados = json.load(arquivo)
+
+#             return [classe_Livro.Livro.from_dict(d) for d in dados]
+
+#     except FileNotFoundError:
+#         return []

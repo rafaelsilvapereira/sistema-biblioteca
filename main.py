@@ -1,9 +1,9 @@
 import dados
-import menus
-import utils as u
-import classe_Sistema
-import funcoes_alunos as fa
-import funcoes_livros as fl
+import utils.menus as menus
+import utils.utils as u
+import models.classe_Sistema as classe_Sistema
+import services.funcoes_alunos as fa
+import services.funcoes_livros as fl
 
 # ========================================
 # PROGRAMA PRINCIPAL

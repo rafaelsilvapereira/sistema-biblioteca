@@ -1,8 +1,11 @@
 import json
+
+from config import ARQUIVO_ALUNOS
+
 import dados
-import menus
-import utils as u
-import classe_Aluno
+import utils.menus as menus
+import utils.utils as u
+import models.classe_Aluno as classe_Aluno
 
 # TITULO DOS MENUS
 
@@ -196,25 +199,65 @@ def verificar_cadastrar_aluno(sistema):
 
     return True
 
-# SALVAR ALUNO JSON
+# SALVAR ALUNO JSON - Qualquer Pasta
 
 def salvar_json_alunos(lista_alunos):
-    with open("alunos.json", "w", encoding="utf-8") as arquivo:
-        json.dump(
-            [aluno.to_dict() for aluno in lista_alunos],
-            arquivo,
-            indent=4,
-            ensure_ascii=False
-        )
+    try:
+        with open(ARQUIVO_ALUNOS, "w", encoding="utf-8") as arquivo:
+            json.dump(
+                [aluno.to_dict() for aluno in lista_alunos],
+                arquivo,
+                indent=4,
+                ensure_ascii=False
+            )
+    except Exception as e:
+        print(f"Erro ao salvar alunos: {e}")
 
-# CARREGAR ALUNOS JSON
+# # SALVAR ALUNO JSON - Qualquer Pasta
+
+# def salvar_json_alunos(lista_alunos):
+#     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+#     caminho = os.path.join(BASE_DIR, '..', 'dados', 'alunos.json')
+
+#     with open(caminho, "w", encoding="utf-8") as arquivo:
+#         json.dump(
+#             [aluno.to_dict() for aluno in lista_alunos],
+#             arquivo,
+#             indent=4,
+#             ensure_ascii=False
+#         )
+
+# # SALVAR ALUNO JSON - Mesma Pasta
+
+# def salvar_json_alunos(lista_alunos):
+#     with open("alunos.json", "w", encoding="utf-8") as arquivo:
+#         json.dump(
+#             [aluno.to_dict() for aluno in lista_alunos],
+#             arquivo,
+#             indent=4,
+#             ensure_ascii=False
+#         )
+
+# CARREGAR ALUNOS JSON - Atualziada
 
 def carregar_json_alunos():
     try:
-        with open("alunos.json", "r", encoding="utf-8") as arquivo:
+        with open(ARQUIVO_ALUNOS, "r", encoding="utf-8") as arquivo:
             dados = json.load(arquivo)
 
             return [classe_Aluno.Aluno.from_dict(d) for d in dados]
 
     except FileNotFoundError:
         return []
+
+# # CARREGAR ALUNOS JSON - Anterior
+
+# def carregar_json_alunos():
+#     try:
+#         with open("alunos.json", "r", encoding="utf-8") as arquivo:
+#             dados = json.load(arquivo)
+
+#             return [classe_Aluno.Aluno.from_dict(d) for d in dados]
+
+#     except FileNotFoundError:
+#         return []
