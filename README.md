@@ -2,9 +2,9 @@
 
 ## 📌 Sobre o projeto
 
-Este projeto é um sistema de gerenciamento de biblioteca desenvolvido em Python, com foco em organização de código, separação de responsabilidades e manipulação de dados em arquivos JSON.
+Sistema de gerenciamento de biblioteca desenvolvido em Python, com foco em organização de código, separação de responsabilidades e aplicação de boas práticas de desenvolvimento.
 
-O sistema permite o controle de alunos e livros, incluindo operações de cadastro, listagem, empréstimo e devolução.
+O sistema permite o controle de alunos e livros, incluindo cadastro, listagem, empréstimo e devolução.
 
 ---
 
@@ -14,7 +14,7 @@ O sistema permite o controle de alunos e livros, incluindo operações de cadast
 * 📚 Cadastro de livros
 * 🔄 Empréstimo de livros
 * ✅ Devolução de livros
-* 📋 Listagem de alunos e livros
+* 📋 Listagem de dados
 
 ---
 
@@ -22,34 +22,31 @@ O sistema permite o controle de alunos e livros, incluindo operações de cadast
 
 * Python
 * JSON (persistência de dados)
+* Git e GitHub
 
 ---
 
 ## ▶️ Como executar o projeto
 
-1. Clone o repositório:
-
 ```bash
 git clone https://github.com/rafaelsilvapereira/sistema-biblioteca.git
-```
-
-2. Acesse a pasta:
-
-```bash
 cd sistema-biblioteca
-```
-
-3. Execute o sistema:
-
-```bash
 python main.py
 ```
 
 ---
 
+## ⚙️ Funcionamento dos dados
+
+O sistema utiliza arquivos JSON para armazenar os dados de alunos e livros.
+
+Caso os arquivos não existam, o sistema cria automaticamente os arquivos necessários ao iniciar, garantindo que o projeto funcione corretamente em qualquer ambiente.
+
+---
+
 ## 📂 Estrutura do projeto
 
-```bash
+```
 sistema-biblioteca/
 │
 ├── dados/            # Arquivos JSON (armazenamento)
@@ -57,7 +54,7 @@ sistema-biblioteca/
 ├── services/         # Regras de negócio
 ├── utils/            # Funções auxiliares e menus
 │
-├── config.py         # Configuração de caminhos
+├── config.py         # Configuração de caminhos e arquivos
 ├── main.py           # Arquivo principal
 ```
 
@@ -67,8 +64,8 @@ sistema-biblioteca/
 
 * Programação Orientada a Objetos (POO)
 * Separação de responsabilidades
-* Organização modular de projeto
-* Leitura e escrita em JSON
+* Estruturação modular
+* Persistência de dados com JSON
 * Tratamento de erros
 
 ---
@@ -84,7 +81,7 @@ sistema-biblioteca/
 
 ## 👨‍💻 Autor
 
-Desenvolvido por Rafael Silva Pereira
+Rafael Silva Pereira
 🔗 LinkedIn: https://www.linkedin.com/in/faelpereirars
 
 ---
