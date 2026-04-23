@@ -212,7 +212,9 @@ def excluir_item(
                 pausar()
                 return
 
-            sistema.remover_aluno(obj) if tipo == "Aluno" else sistema.remover_livro(obj)
+            lista.remove(obj)
+            
+            # sistema.remover_aluno(obj) if tipo == "Aluno" else sistema.remover_livro(obj)
 
             sistema.salvar_json(lista, caminho_arquivo)
 
