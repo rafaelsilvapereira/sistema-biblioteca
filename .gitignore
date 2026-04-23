@@ -3,3 +3,7 @@ __pycache__/
 venv/
 .env
 .vscode/
+
+# Dados do Sistema
+dados/alunos.json
+dados/livros.json

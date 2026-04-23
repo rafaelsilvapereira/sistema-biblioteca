@@ -5,7 +5,7 @@ from config import ARQUIVO_ALUNOS
 import dados
 import utils.menus as menus
 import utils.utils as u
-import models.aluno as aluno
+import models.aluno as ma
 
 # TITULO DOS MENUS
 
@@ -33,10 +33,10 @@ def cadastrar_aluno(sistema):
     email = u.input_texto('\nE-Mail: ')
 
     id = sistema.gerar_id_aluno()
-    aluno = aluno.Aluno(id, nome, celular, email)
+    aluno = ma.Aluno(id, nome, celular, email)
     sistema.adicionar_aluno(aluno)
 
-    salvar_json_alunos(sistema.alunos)
+    sistema.salvar_json(sistema.alunos, ARQUIVO_ALUNOS)
 
     u.mensagem_aviso(f'O Aluno "{nome}" foi cadastrado!')
     
@@ -59,7 +59,9 @@ def alterar_aluno(sistema):
 
     nome_aluno = u.input_texto('Digite o nome do Aluno: ')
 
-    resultados = sistema.buscar_aluno_nome(nome_aluno)
+    resultados = sistema.buscar_por_nome(sistema.alunos, nome_aluno)
+
+    #resultados = sistema.buscar_aluno_nome(nome_aluno)
 
     if len(resultados) == 0:
         titulo(f'RESULTADO DA BUSCA POR "{nome_aluno}":')
@@ -77,7 +79,7 @@ def alterar_aluno(sistema):
 
         id_aluno = u.input_inteiro('\nDigite o ID do Aluno que deseja alterar: ')
 
-        aluno = sistema.buscar_aluno_por_id(id_aluno)
+        aluno = sistema.buscar_por_id(sistema.alunos, id_aluno)
 
         if aluno and aluno in resultados:
             encontrado = True
@@ -88,7 +90,7 @@ def alterar_aluno(sistema):
             if opcao == 1:
                 aluno.nome = u.input_texto('\nNovo Nome: ')
 
-                salvar_json_alunos(sistema.alunos)
+                sistema.salvar_json(sistema.alunos, ARQUIVO_ALUNOS)
 
                 u.mensagem_aviso(f'O nome do aluno foi alterado para "{aluno.nome}".')
 
@@ -98,7 +100,7 @@ def alterar_aluno(sistema):
             elif opcao == 2:
                 aluno.celular = u.input_celular('\nNovo Celular: ')
 
-                salvar_json_alunos(sistema.alunos)
+                sistema.salvar_json(sistema.alunos, ARQUIVO_ALUNOS)
 
                 u.mensagem_aviso(f'O celular do aluno foi alterado para "{aluno.celular}".')
 
@@ -108,7 +110,7 @@ def alterar_aluno(sistema):
             elif opcao == 3:
                 aluno.email = u.input_texto('\nNovo Email: ')
 
-                salvar_json_alunos(sistema.alunos)
+                sistema.salvar_json(sistema.alunos, ARQUIVO_ALUNOS)
 
                 u.mensagem_aviso(f'O e-mail do aluno foi alterado para "{aluno.email}".')
 
@@ -132,56 +134,68 @@ def alterar_aluno(sistema):
                 u.pausar()
                 return
 
-# EXCLUIR ALUNO
+# EXCLUIR ALUNO - Atualizado
 
 def excluir_aluno(sistema):
     titulo_menu('EXCLUIR ALUNO')
 
-    nome_aluno = u.input_texto('Digite o nome do Aluno: ')
+    u.excluir_item(
+        sistema,
+        sistema.alunos,
+        "Aluno",
+        ARQUIVO_ALUNOS
+    )
 
-    resultados = sistema.buscar_aluno_nome(nome_aluno)
+# # EXCLUIR ALUNO (Anterior)
 
-    if len(resultados) == 0:
-        titulo(f'RESULTADO DA BUSCA POR "{nome_aluno}":')
-        print('Nenhum Aluno foi localizado.')
-        u.pausar()
-        return
+# def excluir_aluno(sistema):
+#     titulo_menu('EXCLUIR ALUNO')
 
-    else:
-        titulo(f'RESULTADO DA BUSCA POR "{nome_aluno}":')
+#     nome_aluno = u.input_texto('Digite o nome do Aluno: ')
 
-        for aluno in resultados: print(aluno)
+#     resultados = sistema.buscar_por_nome(sistema.alunos, nome_aluno)
 
-    while True:
-        id_aluno = u.input_inteiro('\nDigite o ID do Aluno que deseja excluir: ')
+#     if len(resultados) == 0:
+#         titulo(f'RESULTADO DA BUSCA POR "{nome_aluno}":')
+#         print('Nenhum Aluno foi localizado.')
+#         u.pausar()
+#         return
 
-        aluno = sistema.buscar_aluno_por_id(id_aluno)
+#     else:
+#         titulo(f'RESULTADO DA BUSCA POR "{nome_aluno}":')
 
-        if aluno and aluno in resultados:
-            opcao_sn = u.input_sn(f'\nDeseja realmente excluir o Aluno "{aluno.nome}" (S/N)? ')
+#         for aluno in resultados: print(aluno)
 
-            if opcao_sn == "n":
-                print('\nOperação Cancelada!')
-                u.pausar()
-                return
+#     while True:
+#         id_aluno = u.input_inteiro('\nDigite o ID do Aluno que deseja excluir: ')
 
-            if opcao_sn == "s":
-                sistema.remover_aluno(aluno)
-                salvar_json_alunos(sistema.alunos)
-                u.mensagem_aviso(f'AVISO: O Aluno {aluno.nome} foi excluído!')
-                u.pausar()
-                return
+#         aluno = sistema.buscar_por_id(sistema.alunos, id_aluno)
 
-        u.mensagem_aviso('O ID informado não foi localizado!')
+#         if aluno and aluno in resultados:
+#             opcao_sn = u.input_sn(f'\nDeseja realmente excluir o Aluno "{aluno.nome}" (S/N)? ')
+
+#             if opcao_sn == "n":
+#                 print('\nOperação Cancelada!')
+#                 u.pausar()
+#                 return
+
+#             if opcao_sn == "s":
+#                 sistema.remover_aluno(aluno)
+#                 sistema.salvar_json(sistema.alunos, ARQUIVO_ALUNOS)
+#                 u.mensagem_aviso(f'AVISO: O Aluno {aluno.nome} foi excluído!')
+#                 u.pausar()
+#                 return
+
+#         u.mensagem_aviso('O ID informado não foi localizado!')
         
-        opcao_id = u.input_sn(f'\nDeseja informar outro ID (S/N)? ')
+#         opcao_id = u.input_sn(f'\nDeseja informar outro ID (S/N)? ')
 
-        if opcao_id == "s": continue
+#         if opcao_id == "s": continue
 
-        if opcao_id == "n":
-            print('\nOperação Cancelada!')
-            u.pausar()
-            return
+#         if opcao_id == "n":
+#             print('\nOperação Cancelada!')
+#             u.pausar()
+#             return
 
 # VERIFICAR SE EXISTE ALUNO OU CADASTRAR ALUNO
 
@@ -199,21 +213,30 @@ def verificar_cadastrar_aluno(sistema):
 
     return True
 
-# SALVAR ALUNO JSON - Qualquer Pasta
+# # SALVAR JSON - Atualizada (Qualquer Pasta)
 
-def salvar_json_alunos(lista_alunos):
-    try:
-        with open(ARQUIVO_ALUNOS, "w", encoding="utf-8") as arquivo:
-            json.dump(
-                [aluno.to_dict() for aluno in lista_alunos],
-                arquivo,
-                indent=4,
-                ensure_ascii=False
-            )
-    except Exception as e:
-        print(f"Erro ao salvar alunos: {e}")
+# def salvar_json(lista_objetos, caminho_arquivo):
+#     try:
+#         with open(caminho_arquivo, "w", encoding="utf-8") as f:
+#             json.dump([obj.to_dict() for obj in lista_objetos], f, indent=4, ensure_ascii=False)
+#     except Exception as e:
+#         print(f"Erro ao salvar alunos: {e}")
 
-# # SALVAR ALUNO JSON - Qualquer Pasta
+# # SALVAR ALUNO JSON - Anterior (Qualquer Pasta)
+
+# def salvar_json_alunos(lista_alunos):
+#     try:
+#         with open(ARQUIVO_ALUNOS, "w", encoding="utf-8") as arquivo:
+#             json.dump(
+#                 [aluno.to_dict() for aluno in lista_alunos],
+#                 arquivo,
+#                 indent=4,
+#                 ensure_ascii=False
+#             )
+#     except Exception as e:
+#         print(f"Erro ao salvar alunos: {e}")
+
+# # SALVAR ALUNO JSON (Qualquer Pasta)
 
 # def salvar_json_alunos(lista_alunos):
 #     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -227,7 +250,7 @@ def salvar_json_alunos(lista_alunos):
 #             ensure_ascii=False
 #         )
 
-# # SALVAR ALUNO JSON - Mesma Pasta
+# # SALVAR ALUNO JSON (Mesma Pasta)
 
 # def salvar_json_alunos(lista_alunos):
 #     with open("alunos.json", "w", encoding="utf-8") as arquivo:
@@ -238,19 +261,19 @@ def salvar_json_alunos(lista_alunos):
 #             ensure_ascii=False
 #         )
 
-# CARREGAR ALUNOS JSON - Atualziada
+# CARREGAR ALUNOS JSON (Atualizada)
 
 def carregar_json_alunos():
     try:
         with open(ARQUIVO_ALUNOS, "r", encoding="utf-8") as arquivo:
             dados = json.load(arquivo)
 
-            return [aluno.Aluno.from_dict(d) for d in dados]
+            return [ma.Aluno.from_dict(d) for d in dados]
 
     except FileNotFoundError:
         return []
 
-# # CARREGAR ALUNOS JSON - Anterior
+# # CARREGAR ALUNOS JSON (Anterior)
 
 # def carregar_json_alunos():
 #     try:

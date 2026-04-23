@@ -7,7 +7,7 @@ from config import ARQUIVO_LIVROS
 import dados
 import utils.menus as menus
 import utils.utils as u
-import models.livro as livro
+import models.livro as ml
 
 # TITULO DOS MENUS
 
@@ -35,11 +35,11 @@ def cadastrar_livro(sistema):
     quantidade = u.input_inteiro('\nQuantidade: ')
 
     id = sistema.gerar_id_livro()
-    livro = livro.Livro(id, data_cadastro, nome, quantidade)
+    livro = ml.Livro(id, data_cadastro, nome, quantidade)
     livro.atualizar_status()
     sistema.adicionar_livro(livro)
 
-    salvar_json_livros(sistema.livros)
+    sistema.salvar_json(sistema.livros, ARQUIVO_LIVROS)
 
     u.mensagem_aviso(f'O Livro {nome} foi cadastrado!')
 
@@ -62,7 +62,9 @@ def alterar_livro(sistema):
 
     nome_livro = u.input_texto('Digite o nome do Livro: ')
 
-    resultados = sistema.buscar_livro_nome(nome_livro)
+    resultados = sistema.buscar_por_nome(sistema.livros, nome_livro)
+
+    #resultados = sistema.buscar_livro_nome(nome_livro)
 
     if len(resultados) == 0:
         titulo(f'RESULTADO DA BUSCA POR "{nome_livro}":')
@@ -80,7 +82,7 @@ def alterar_livro(sistema):
 
         id_livro = u.input_inteiro('\nDigite o ID do Livro que deseja alterar: ')
 
-        livro = sistema.buscar_livro_por_id(id_livro)
+        livro = sistema.buscar_por_id(sistema.livros, id_livro)
 
         if livro and livro in resultados:
             encontrado = True
@@ -91,7 +93,7 @@ def alterar_livro(sistema):
             if opcao == 1:
                 livro.nome = u.input_texto('\nNovo Nome: ')
 
-                salvar_json_livros(sistema.livros)
+                sistema.salvar_json(sistema.livros, ARQUIVO_LIVROS)
 
                 u.mensagem_aviso(f'O nome do livro foi alterado para "{livro.nome}".')
 
@@ -102,7 +104,7 @@ def alterar_livro(sistema):
                 livro.quantidade = u.input_inteiro('\nNova Quantidade: ')
                 livro.atualizar_status()
 
-                salvar_json_livros(sistema.livros)
+                sistema.salvar_json(sistema.livros, ARQUIVO_LIVROS)
 
                 u.mensagem_aviso(f'A quantidade do livro foi alterado para "{livro.quantidade}".')
 
@@ -126,56 +128,68 @@ def alterar_livro(sistema):
                 u.pausar()
                 return
 
-# EXCLUIR LIVRO
+# EXCLUIR LIVRO - Atualizada
 
 def excluir_livro(sistema):
     titulo_menu('EXCLUIR LIVRO')
 
-    nome_livro = u.input_texto('Digite o nome do Livro: ')
+    u.excluir_item(
+        sistema,
+        sistema.livros,
+        "Livro",
+        ARQUIVO_LIVROS
+    )
 
-    resultados = sistema.buscar_livro_nome(nome_livro)
+# # EXCLUIR LIVRO - Anterior
 
-    if len(resultados) == 0:
-        titulo(f'RESULTADO DA BUSCA POR "{nome_livro}":')
-        print('Nenhum Livro foi localizado.')
-        u.pausar()
-        return
+# def excluir_livro(sistema):
+#     titulo_menu('EXCLUIR LIVRO')
 
-    else:
-        titulo(f'RESULTADO DA BUSCA POR "{nome_livro}":')
+#     nome_livro = u.input_texto('Digite o nome do Livro: ')
 
-        for livro in resultados: print(livro)
+#     resultados = sistema.buscar_por_nome(sistema.livros, nome_livro)
 
-    while True:
-        id_livro = u.input_inteiro('\nDigite o ID do Livro que deseja excluir: ')
+#     if len(resultados) == 0:
+#         titulo(f'RESULTADO DA BUSCA POR "{nome_livro}":')
+#         print('Nenhum Livro foi localizado.')
+#         u.pausar()
+#         return
 
-        livro = sistema.buscar_livro_por_id(id_livro)
+#     else:
+#         titulo(f'RESULTADO DA BUSCA POR "{nome_livro}":')
 
-        if livro and livro in resultados:
-            opcao_sn = u.input_sn(f'\nDeseja realmente excluir o Livro "{livro.nome}" (S/N)? ')
+#         for livro in resultados: print(livro)
 
-            if opcao_sn == "n":
-                print('\nOperação Cancelada!')
-                u.pausar()
-                return
+#     while True:
+#         id_livro = u.input_inteiro('\nDigite o ID do Livro que deseja excluir: ')
 
-            if opcao_sn == "s":
-                sistema.remover_livro(livro)
-                salvar_json_livros(sistema.livros)
-                u.mensagem_aviso(f'AVISO: O Livro {livro.nome} foi excluído!')
-                u.pausar()
-                return
+#         livro = sistema.buscar_por_id(sistema.livros, id_livro)
 
-        u.mensagem_aviso('O ID informado não foi localizado!')
+#         if livro and livro in resultados:
+#             opcao_sn = u.input_sn(f'\nDeseja realmente excluir o Livro "{livro.nome}" (S/N)? ')
+
+#             if opcao_sn == "n":
+#                 print('\nOperação Cancelada!')
+#                 u.pausar()
+#                 return
+
+#             if opcao_sn == "s":
+#                 sistema.remover_livro(livro)
+#                 sistema.salvar_json(sistema.livros, ARQUIVO_LIVROS)
+#                 u.mensagem_aviso(f'AVISO: O Livro {livro.nome} foi excluído!')
+#                 u.pausar()
+#                 return
+
+#         u.mensagem_aviso('O ID informado não foi localizado!')
         
-        opcao_id = u.input_sn(f'\nDeseja informar outro ID (S/N)? ')
+#         opcao_id = u.input_sn(f'\nDeseja informar outro ID (S/N)? ')
 
-        if opcao_id == "s": continue
+#         if opcao_id == "s": continue
 
-        if opcao_id == "n":
-            print('\nOperação Cancelada!')
-            u.pausar()
-            return
+#         if opcao_id == "n":
+#             print('\nOperação Cancelada!')
+#             u.pausar()
+#             return
 
 # VERIFICAR SE EXISTE LIVRO OU CADASTRAR LIVRO
 
@@ -193,19 +207,19 @@ def verificar_cadastrar_livro(sistema):
 
     return True
 
-# SALVAR LIVRO JSON - Atualizada
+# # SALVAR LIVRO JSON - Atualizada
 
-def salvar_json_livros(lista_livros):
-    try:
-        with open(ARQUIVO_LIVROS, "w", encoding="utf-8") as arquivo:
-            json.dump(
-                [livro.to_dict() for livro in lista_livros],
-                arquivo,
-                indent=4,
-                ensure_ascii=False
-            )
-    except Exception as e:
-        print(f"Erro ao salvar livros: {e}")
+# def salvar_json_livros(lista_livros):
+#     try:
+#         with open(ARQUIVO_LIVROS, "w", encoding="utf-8") as arquivo:
+#             json.dump(
+#                 [livro.to_dict() for livro in lista_livros],
+#                 arquivo,
+#                 indent=4,
+#                 ensure_ascii=False
+#             )
+#     except Exception as e:
+#         print(f"Erro ao salvar livros: {e}")
 
 # CARREGAR LIVROS JSON - Atualizada
 
@@ -214,7 +228,7 @@ def carregar_json_livros():
         with open(ARQUIVO_LIVROS, "r", encoding="utf-8") as arquivo:
             dados = json.load(arquivo)
 
-            return [livro.Livro.from_dict(d) for d in dados]
+            return [ml.Livro.from_dict(d) for d in dados]
 
     except FileNotFoundError:
         return []

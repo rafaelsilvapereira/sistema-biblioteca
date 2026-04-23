@@ -119,3 +119,47 @@ def algo_ja_cadastrado(algo, local, texto):
 
 def atualizar_status(quantidade):
     return "Indisponível" if quantidade == 0 else "Disponível"
+
+# EXCLUIR ITEM
+
+def excluir_item(
+    sistema,
+    lista,
+    tipo,
+    caminho_arquivo
+):
+    nome = input_texto(f'Digite o nome do {tipo}: ')
+
+    resultados = sistema.buscar_por_nome(lista, nome)
+
+    if not resultados:
+        titulo_menu(f'RESULTADO DA BUSCA POR "{nome}":')
+        print(f'Nenhum {tipo} foi localizado.')
+        pausar()
+        return
+
+    titulo_menu(f'RESULTADO DA BUSCA POR "{nome}":')
+    for obj in resultados:
+        print(obj)
+
+    while True:
+        id_obj = input_inteiro(f'\nDigite o ID do {tipo} que deseja excluir: ')
+        obj = sistema.buscar_por_id(lista, id_obj)
+
+        if obj and obj in resultados:
+            opcao = input_sn(f'\nDeseja realmente excluir o {tipo} "{obj.nome}" (S/N)? ')
+
+            if opcao == "n":
+                print('\nOperação Cancelada!')
+                pausar()
+                return
+
+            sistema.remover_aluno(obj) if tipo == "Aluno" else sistema.remover_livro(obj)
+
+            sistema.salvar_json(lista, caminho_arquivo)
+
+            mensagem_aviso(f'AVISO: O {tipo} {obj.nome} foi excluído!')
+            pausar()
+            return
+
+        mensagem_aviso('O ID informado não foi localizado!')

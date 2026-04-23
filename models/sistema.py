@@ -1,3 +1,5 @@
+import json
+
 # CLASSE SISTEMA - Controle (Sem Inputs)
 
 class SistemaBiblioteca:
@@ -26,20 +28,29 @@ class SistemaBiblioteca:
     def remover_aluno(self, aluno):
         self.alunos.remove(aluno)
 
-    # Busca Retorna Todos os Encontrados Com o Termo Pesquisado
-    def buscar_aluno_nome(self, nome):
-        encontrados = []
+    # # Busca Retorna Todos os Encontrados Com o Termo Pesquisado
+    # def buscar_aluno_nome(self, nome):
+    #     encontrados = []
 
-        for aluno in self.alunos:
-            if nome.lower() in aluno.nome.lower():
-                encontrados.append(aluno)
-        return encontrados
+    #     for aluno in self.alunos:
+    #         if nome.lower() in aluno.nome.lower():
+    #             encontrados.append(aluno)
+    #     return encontrados
     
-    def buscar_aluno_por_id(self, id_aluno):
-        for aluno in self.alunos:
-            if aluno.id == id_aluno:
-                return aluno
-        return None
+    # def buscar_aluno_por_id(self, id_aluno):
+    #     for aluno in self.alunos:
+    #         if aluno.id == id_aluno:
+    #             return aluno
+    #     return None
+
+    # SALVAR JSON - Atualizada (Qualquer Pasta)
+
+    def salvar_json(self, lista_objetos, caminho_arquivo):
+        try:
+            with open(caminho_arquivo, "w", encoding="utf-8") as f:
+                json.dump([obj.to_dict() for obj in lista_objetos], f, indent=4, ensure_ascii=False)
+        except Exception as e:
+            print(f"Erro ao salvar alunos: {e}")
 
     # --------------------------------------------------
     # FUNÇÕES CLASSE LIVRO
@@ -59,16 +70,42 @@ class SistemaBiblioteca:
     def remover_livro(self, livro):
         self.livros.remove(livro)
 
-    def buscar_livro_nome(self, nome):
-        encontrados = []
+    # def buscar_livro_nome(self, nome):
+    #     encontrados = []
 
-        for livro in self.livros:
-            if nome.lower() in livro.nome.lower():
-                encontrados.append(livro)
-        return encontrados
+    #     for livro in self.livros:
+    #         if nome.lower() in livro.nome.lower():
+    #             encontrados.append(livro)
+    #     return encontrados
 
-    def buscar_livro_por_id(self, id_livro):
-        for livro in self.livros:
-            if livro.id == id_livro:
-                return livro
+    # def buscar_livro_por_id(self, id_livro):
+    #     for livro in self.livros:
+    #         if livro.id == id_livro:
+    #             return livro
+    #     return None
+
+    # --------------------------------------------------
+    # FUNÇÕES GENÉRICAS
+    # --------------------------------------------------
+
+    # BUSCAR POR NOME
+
+    def buscar_por_nome(self, lista_objetos, nome):
+        return [obj for obj in lista_objetos if nome.lower() in obj.nome.lower()]
+    
+    # BUSCAR POR ID
+
+    def buscar_por_id(self, lista_objetos, id):
+        for obj in lista_objetos:
+            if obj.id == id:
+                return obj
         return None
+
+    # SALVAR JSON (Qualquer Pasta)
+
+    def salvar_json(self, lista_objetos, caminho_arquivo):
+        try:
+            with open(caminho_arquivo, "w", encoding="utf-8") as f:
+                json.dump([obj.to_dict() for obj in lista_objetos], f, indent=4, ensure_ascii=False)
+        except Exception as e:
+            print(f"Erro ao salvar alunos: {e}")
