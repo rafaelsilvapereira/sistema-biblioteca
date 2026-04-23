@@ -1,6 +1,6 @@
 import json
 
-from config import ARQUIVO_ALUNOS
+from config import ARQUIVO_ALUNOS, garantir_arquivo_json
 
 import dados
 import utils.menus as menus
@@ -264,14 +264,19 @@ def verificar_cadastrar_aluno(sistema):
 # CARREGAR ALUNOS JSON (Atualizada)
 
 def carregar_json_alunos():
+    garantir_arquivo_json(ARQUIVO_ALUNOS)
+
     try:
         with open(ARQUIVO_ALUNOS, "r", encoding="utf-8") as arquivo:
             dados = json.load(arquivo)
 
             return [ma.Aluno.from_dict(d) for d in dados]
 
-    except FileNotFoundError:
-        return []
+    except json.JSONDecodeError:
+            return []
+
+    # except FileNotFoundError:
+    #     return []
 
 # # CARREGAR ALUNOS JSON (Anterior)
 
