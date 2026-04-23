@@ -55,78 +55,101 @@ def listar_livros(sistema):
 
     u.pausar()
 
-# ALTERAR LIVRO
+# ALTERAR LIVRO - Atualizada
 
 def alterar_livro(sistema):
     titulo_menu('ALTERAR LIVRO')
 
-    nome_livro = u.input_texto('Digite o nome do Livro: ')
+    funcoes = {
+        1: lambda l: setattr(l, "nome", u.input_texto('\nNovo Nome: ')),
+        2: lambda l: [
+            setattr(l, "quantidade", u.input_inteiro('\nNova Quantidade: ')),
+            l.atualizar_status()
+        ]
+    }
 
-    resultados = sistema.buscar_por_nome(sistema.livros, nome_livro)
+    u.alterar_item(
+        sistema,
+        sistema.livros,
+        "Livro",
+        ARQUIVO_LIVROS,
+        menus.menu_alterar_livro,
+        sistema.opcoes_alterar_livro,
+        funcoes
+    )
 
-    #resultados = sistema.buscar_livro_nome(nome_livro)
+# # ALTERAR LIVRO - Anterior
 
-    if len(resultados) == 0:
-        titulo(f'RESULTADO DA BUSCA POR "{nome_livro}":')
-        print('Nenhum Livro foi localizado.')
-        u.pausar()
-        return
+# def alterar_livro(sistema):
+#     titulo_menu('ALTERAR LIVRO')
 
-    else:
-        titulo(f'RESULTADO DA BUSCA POR "{nome_livro}":')
+#     nome_livro = u.input_texto('Digite o nome do Livro: ')
 
-        for livro in resultados: print(livro)
+#     resultados = sistema.buscar_por_nome(sistema.livros, nome_livro)
 
-    while True:
-        encontrado = False # Dentro do While - Cada tentativa começa zerada.
+#     #resultados = sistema.buscar_livro_nome(nome_livro)
 
-        id_livro = u.input_inteiro('\nDigite o ID do Livro que deseja alterar: ')
+#     if len(resultados) == 0:
+#         titulo(f'RESULTADO DA BUSCA POR "{nome_livro}":')
+#         print('Nenhum Livro foi localizado.')
+#         u.pausar()
+#         return
 
-        livro = sistema.buscar_por_id(sistema.livros, id_livro)
+#     else:
+#         titulo(f'RESULTADO DA BUSCA POR "{nome_livro}":')
 
-        if livro and livro in resultados:
-            encontrado = True
-            menus.menu_alterar_livro(livro.nome)
+#         for livro in resultados: print(livro)
 
-            opcao = u.input_escolher_menu(dados.opcoes_alterar_livro)
+#     while True:
+#         encontrado = False # Dentro do While - Cada tentativa começa zerada.
 
-            if opcao == 1:
-                livro.nome = u.input_texto('\nNovo Nome: ')
+#         id_livro = u.input_inteiro('\nDigite o ID do Livro que deseja alterar: ')
 
-                sistema.salvar_json(sistema.livros, ARQUIVO_LIVROS)
+#         livro = sistema.buscar_por_id(sistema.livros, id_livro)
 
-                u.mensagem_aviso(f'O nome do livro foi alterado para "{livro.nome}".')
+#         if livro and livro in resultados:
+#             encontrado = True
+#             menus.menu_alterar_livro(livro.nome)
 
-                u.pausar()
-                return
+#             opcao = u.input_escolher_menu(dados.opcoes_alterar_livro)
 
-            elif opcao == 2:
-                livro.quantidade = u.input_inteiro('\nNova Quantidade: ')
-                livro.atualizar_status()
+#             if opcao == 1:
+#                 livro.nome = u.input_texto('\nNovo Nome: ')
 
-                sistema.salvar_json(sistema.livros, ARQUIVO_LIVROS)
+#                 sistema.salvar_json(sistema.livros, ARQUIVO_LIVROS)
 
-                u.mensagem_aviso(f'A quantidade do livro foi alterado para "{livro.quantidade}".')
+#                 u.mensagem_aviso(f'O nome do livro foi alterado para "{livro.nome}".')
 
-                u.pausar()
-                return
+#                 u.pausar()
+#                 return
 
-            else:
-                print('\nOperação Cancelada.')
-                u.pausar()
-                return
+#             elif opcao == 2:
+#                 livro.quantidade = u.input_inteiro('\nNova Quantidade: ')
+#                 livro.atualizar_status()
 
-        if not encontrado:
-            u.mensagem_aviso('O ID informado não foi localizado!')
+#                 sistema.salvar_json(sistema.livros, ARQUIVO_LIVROS)
 
-            opcao_id = u.input_sn(f'\nDeseja informar outro ID (S/N)? ')
+#                 u.mensagem_aviso(f'A quantidade do livro foi alterado para "{livro.quantidade}".')
 
-            if opcao_id == "s": continue
+#                 u.pausar()
+#                 return
 
-            if opcao_id == "n":
-                print('\nOperação Cancelada!')
-                u.pausar()
-                return
+#             else:
+#                 print('\nOperação Cancelada.')
+#                 u.pausar()
+#                 return
+
+#         if not encontrado:
+#             u.mensagem_aviso('O ID informado não foi localizado!')
+
+#             opcao_id = u.input_sn(f'\nDeseja informar outro ID (S/N)? ')
+
+#             if opcao_id == "s": continue
+
+#             if opcao_id == "n":
+#                 print('\nOperação Cancelada!')
+#                 u.pausar()
+#                 return
 
 # EXCLUIR LIVRO - Atualizada
 

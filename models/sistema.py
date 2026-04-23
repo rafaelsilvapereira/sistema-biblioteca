@@ -9,6 +9,13 @@ class SistemaBiblioteca:
         self.livros = []
         self.ultimo_id_aluno = 0
         self.ultimo_id_livro = 0
+
+        # Opções Menus
+        self.opcoes_menu_principal = [1, 2, 3, 4, 5, 0]
+        self.opcoes_menu_alunos = [1, 2, 3, 4, 0]
+        self.opcoes_menu_livros = [1, 2, 3, 4, 0]
+        self.opcoes_alterar_aluno = [1, 2, 3, 0]
+        self.opcoes_alterar_livro = [1, 2, 0]
         
     # --------------------------------------------------
     # FUNÇÕES CLASSE ALUNO
@@ -42,15 +49,6 @@ class SistemaBiblioteca:
     #         if aluno.id == id_aluno:
     #             return aluno
     #     return None
-
-    # SALVAR JSON - Atualizada (Qualquer Pasta)
-
-    def salvar_json(self, lista_objetos, caminho_arquivo):
-        try:
-            with open(caminho_arquivo, "w", encoding="utf-8") as f:
-                json.dump([obj.to_dict() for obj in lista_objetos], f, indent=4, ensure_ascii=False)
-        except Exception as e:
-            print(f"Erro ao salvar alunos: {e}")
 
     # --------------------------------------------------
     # FUNÇÕES CLASSE LIVRO

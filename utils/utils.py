@@ -120,6 +120,64 @@ def algo_ja_cadastrado(algo, local, texto):
 def atualizar_status(quantidade):
     return "Indisponível" if quantidade == 0 else "Disponível"
 
+# ALTERAR ITEM
+
+def alterar_item(
+    sistema,
+    lista,
+    tipo,
+    caminho_arquivo,
+    menu_func,
+    opcoes,
+    funcoes_alteracao
+):
+    nome = input_texto(f'Digite o nome do {tipo}: ')
+    resultados = sistema.buscar_por_nome(lista, nome)
+
+    if not resultados:
+        titulo_menu(f'RESULTADO DA BUSCA POR "{nome}":')
+        print(f'Nenhum {tipo} foi localizado.')
+        pausar()
+        return
+
+    titulo_menu(f'RESULTADO DA BUSCA POR "{nome}":')
+    for obj in resultados:
+        print(obj)
+
+    while True:
+        id_obj = input_inteiro(f'\nDigite o ID do {tipo} que deseja alterar: ')
+        obj = sistema.buscar_por_id(lista, id_obj)
+
+        if obj and obj in resultados:
+            menu_func(obj.nome)
+
+            opcao = input_escolher_menu(opcoes)
+
+            if opcao in funcoes_alteracao:
+                funcoes_alteracao[opcao](obj)
+
+                sistema.salvar_json(lista, caminho_arquivo)
+
+                mensagem_aviso(f'{tipo} atualizado com sucesso!')
+                pausar()
+                return
+
+            else:
+                print('\nOperação Cancelada.')
+                pausar()
+                return
+
+        mensagem_aviso('O ID informado não foi localizado!')
+
+        opcao_id = input_sn('\nDeseja informar outro ID (S/N)? ')
+
+        if opcao_id == "s": continue
+
+        if opcao_id == "n":
+            print('\nOperação Cancelada!')
+            pausar()
+            return
+
 # EXCLUIR ITEM
 
 def excluir_item(
@@ -163,3 +221,12 @@ def excluir_item(
             return
 
         mensagem_aviso('O ID informado não foi localizado!')
+
+        opcao_id = input_sn('\nDeseja informar outro ID (S/N)? ')
+
+        if opcao_id == "s": continue
+
+        if opcao_id == "n":
+            print('\nOperação Cancelada!')
+            pausar()
+            return

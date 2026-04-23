@@ -1,4 +1,3 @@
-import dados
 import utils.menus as menus
 import utils.utils as u
 import models.sistema as sistema
@@ -23,14 +22,14 @@ while True:
     # Menu Principal
     menus.menu_principal()
 
-    menu_principal = u.input_escolher_menu(dados.opcoes_menu_principal)
+    menu_principal = u.input_escolher_menu(sistema.opcoes_menu_principal)
 
     if menu_principal == 1:
         while True:
             # Menu Alunos
             menus.menu_alunos()
 
-            menu_alunos = u.input_escolher_menu(dados.opcoes_menu_alunos)
+            menu_alunos = u.input_escolher_menu(sistema.opcoes_menu_alunos)
 
             if menu_alunos == 1: fa.cadastrar_aluno(sistema)
 
@@ -57,7 +56,7 @@ while True:
             # Menu Livros
             menus.menu_livros()
 
-            menu_livros = u.input_escolher_menu(dados.opcoes_menu_livros)
+            menu_livros = u.input_escolher_menu(sistema.opcoes_menu_livros)
 
             if menu_livros == 1: fl.cadastrar_livro(sistema)
 

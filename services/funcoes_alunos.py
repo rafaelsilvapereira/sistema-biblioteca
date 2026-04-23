@@ -52,87 +52,108 @@ def listar_alunos(sistema):
 
     u.pausar()
 
-# ALTERAR ALUNO
+# ALTERAR ALUNO - Atualizada
 
 def alterar_aluno(sistema):
     titulo_menu('ALTERAR ALUNO')
 
-    nome_aluno = u.input_texto('Digite o nome do Aluno: ')
+    funcoes = {
+        1: lambda a: setattr(a, "nome", u.input_texto('\nNovo Nome: ')),
+        2: lambda a: setattr(a, "celular", u.input_celular('\nNovo Celular: ')),
+        3: lambda a: setattr(a, "email", u.input_texto('\nNovo Email: '))
+    }
 
-    resultados = sistema.buscar_por_nome(sistema.alunos, nome_aluno)
+    u.alterar_item(
+        sistema,
+        sistema.alunos,
+        "Aluno",
+        ARQUIVO_ALUNOS,
+        menus.menu_alterar_aluno,
+        sistema.opcoes_alterar_aluno,
+        funcoes
+    )
 
-    #resultados = sistema.buscar_aluno_nome(nome_aluno)
+# # ALTERAR ALUNO - Anterior
 
-    if len(resultados) == 0:
-        titulo(f'RESULTADO DA BUSCA POR "{nome_aluno}":')
-        print('Nenhum Aluno foi localizado.')
-        u.pausar()
-        return
+# def alterar_aluno(sistema):
+#     titulo_menu('ALTERAR ALUNO')
 
-    else:
-        titulo(f'RESULTADO DA BUSCA POR "{nome_aluno}":')
+#     nome_aluno = u.input_texto('Digite o nome do Aluno: ')
 
-        for aluno in resultados: print(aluno)
+#     resultados = sistema.buscar_por_nome(sistema.alunos, nome_aluno)
 
-    while True:
-        encontrado = False # Dentro do While - Cada tentativa começa zerada.
+#     #resultados = sistema.buscar_aluno_nome(nome_aluno)
 
-        id_aluno = u.input_inteiro('\nDigite o ID do Aluno que deseja alterar: ')
+#     if len(resultados) == 0:
+#         titulo(f'RESULTADO DA BUSCA POR "{nome_aluno}":')
+#         print('Nenhum Aluno foi localizado.')
+#         u.pausar()
+#         return
 
-        aluno = sistema.buscar_por_id(sistema.alunos, id_aluno)
+#     else:
+#         titulo(f'RESULTADO DA BUSCA POR "{nome_aluno}":')
 
-        if aluno and aluno in resultados:
-            encontrado = True
-            menus.menu_alterar_aluno(aluno.nome)
+#         for aluno in resultados: print(aluno)
 
-            opcao = u.input_escolher_menu(dados.opcoes_alterar_aluno)
+#     while True:
+#         encontrado = False # Dentro do While - Cada tentativa começa zerada.
 
-            if opcao == 1:
-                aluno.nome = u.input_texto('\nNovo Nome: ')
+#         id_aluno = u.input_inteiro('\nDigite o ID do Aluno que deseja alterar: ')
 
-                sistema.salvar_json(sistema.alunos, ARQUIVO_ALUNOS)
+#         aluno = sistema.buscar_por_id(sistema.alunos, id_aluno)
 
-                u.mensagem_aviso(f'O nome do aluno foi alterado para "{aluno.nome}".')
+#         if aluno and aluno in resultados:
+#             encontrado = True
+#             menus.menu_alterar_aluno(aluno.nome)
 
-                u.pausar()
-                return
+#             opcao = u.input_escolher_menu(dados.opcoes_alterar_aluno)
 
-            elif opcao == 2:
-                aluno.celular = u.input_celular('\nNovo Celular: ')
+#             if opcao == 1:
+#                 aluno.nome = u.input_texto('\nNovo Nome: ')
 
-                sistema.salvar_json(sistema.alunos, ARQUIVO_ALUNOS)
+#                 sistema.salvar_json(sistema.alunos, ARQUIVO_ALUNOS)
 
-                u.mensagem_aviso(f'O celular do aluno foi alterado para "{aluno.celular}".')
+#                 u.mensagem_aviso(f'O nome do aluno foi alterado para "{aluno.nome}".')
 
-                u.pausar()
-                return
+#                 u.pausar()
+#                 return
 
-            elif opcao == 3:
-                aluno.email = u.input_texto('\nNovo Email: ')
+#             elif opcao == 2:
+#                 aluno.celular = u.input_celular('\nNovo Celular: ')
 
-                sistema.salvar_json(sistema.alunos, ARQUIVO_ALUNOS)
+#                 sistema.salvar_json(sistema.alunos, ARQUIVO_ALUNOS)
 
-                u.mensagem_aviso(f'O e-mail do aluno foi alterado para "{aluno.email}".')
+#                 u.mensagem_aviso(f'O celular do aluno foi alterado para "{aluno.celular}".')
 
-                u.pausar()
-                return
+#                 u.pausar()
+#                 return
 
-            else:
-                print('\nOperação Cancelada.')
-                u.pausar()
-                return
+#             elif opcao == 3:
+#                 aluno.email = u.input_texto('\nNovo Email: ')
 
-        if not encontrado:
-            u.mensagem_aviso('O ID informado não foi localizado!')
+#                 sistema.salvar_json(sistema.alunos, ARQUIVO_ALUNOS)
 
-            opcao_id = u.input_sn(f'\nDeseja informar outro ID (S/N)? ')
+#                 u.mensagem_aviso(f'O e-mail do aluno foi alterado para "{aluno.email}".')
 
-            if opcao_id == "s": continue
+#                 u.pausar()
+#                 return
 
-            if opcao_id == "n":
-                print('\nOperação Cancelada!')
-                u.pausar()
-                return
+#             else:
+#                 print('\nOperação Cancelada.')
+#                 u.pausar()
+#                 return
+
+#         if not encontrado:
+#             u.mensagem_aviso('O ID informado não foi localizado!')
+
+#             opcao_id = u.input_sn(f'\nDeseja informar outro ID (S/N)? ')
+
+#             if opcao_id == "s": continue
+
+#             if opcao_id == "n":
+#                 print('\nOperação Cancelada!')
+#                 u.pausar()
+#                 return
 
 # EXCLUIR ALUNO - Atualizado
 
