@@ -1,14 +1,22 @@
 import json
+import utils.utils as u
 
 # CLASSE SISTEMA - Controle (Sem Inputs)
 
 class SistemaBiblioteca:
     # Variáveis de Armazenamento e Controle
     def __init__(self):
+        # Alunos e ID
         self.alunos = []
-        self.livros = []
         self.ultimo_id_aluno = 0
+
+        # Livros e ID
+        self.livros = []
         self.ultimo_id_livro = 0
+
+        # Emprestimos e ID
+        self.emprestimos = []
+        self.ultimo_id_emprestimo = 0
 
         # Opções Menus
         self.opcoes_menu_principal = [1, 2, 3, 4, 5, 0]
@@ -35,21 +43,6 @@ class SistemaBiblioteca:
     def remover_aluno(self, aluno):
         self.alunos.remove(aluno)
 
-    # # Busca Retorna Todos os Encontrados Com o Termo Pesquisado
-    # def buscar_aluno_nome(self, nome):
-    #     encontrados = []
-
-    #     for aluno in self.alunos:
-    #         if nome.lower() in aluno.nome.lower():
-    #             encontrados.append(aluno)
-    #     return encontrados
-    
-    # def buscar_aluno_por_id(self, id_aluno):
-    #     for aluno in self.alunos:
-    #         if aluno.id == id_aluno:
-    #             return aluno
-    #     return None
-
     # --------------------------------------------------
     # FUNÇÕES CLASSE LIVRO
     # --------------------------------------------------
@@ -68,19 +61,20 @@ class SistemaBiblioteca:
     def remover_livro(self, livro):
         self.livros.remove(livro)
 
-    # def buscar_livro_nome(self, nome):
-    #     encontrados = []
+    # --------------------------------------------------
+    # FUNÇÕES CLASSE EMPRÉSTIMO
+    # --------------------------------------------------
 
-    #     for livro in self.livros:
-    #         if nome.lower() in livro.nome.lower():
-    #             encontrados.append(livro)
-    #     return encontrados
+    def gerar_id_emprestimo(self):
+        self.ultimo_id_emprestimo += 1
+        return self.ultimo_id_emprestimo
+    
+    def carregar_ids_emprestimo(self):
+        if self.emprestimos:
+            self.ultimo_id_emprestimo = max(emprestimo.id for emprestimo in self.emprestimos)
 
-    # def buscar_livro_por_id(self, id_livro):
-    #     for livro in self.livros:
-    #         if livro.id == id_livro:
-    #             return livro
-    #     return None
+    def adicionar_emprestimo(self, emprestimo):
+        self.emprestimos.append(emprestimo)
 
     # --------------------------------------------------
     # FUNÇÕES GENÉRICAS

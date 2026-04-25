@@ -1,5 +1,18 @@
 import os
 
+# CORES E MAIS...
+
+C = {
+    "VERDE": "\033[92m",
+    "AMARELO": "\033[33m",
+    "AZUL": "\033[36m",
+    "VERMELHO": "\033[31m",
+    "CINZA": "\033[7;30m",
+    "INVERTER": "\033[7m",
+    "BOLD": "\033[1m",
+    "FIM": "\033[0m"
+}
+
 # LIMPA TERMINAL - Independentemente do Sistema Operacional
 
 def limpar_terminal():
@@ -15,20 +28,26 @@ def pausar(): input('\nPressione ENTER para continuar...')
 # TÍTULO MENUS
 
 def titulo_menu(mensagem):
-    print('')
-    print('=' * 50)
-    print(mensagem.center(50, " "))
-    print('=' * 50)
-    print('')
+    limpar_terminal()
 
-# MENSAGENS DE AVISO
+    cor_divisor = f'{C['INVERTER']}{C['BOLD']}'
+    cor_do_titulo = f'{C['INVERTER']}{C['BOLD']}'
+    reset = C['FIM']
 
-def mensagem_aviso(mensagem):
-    print('')
-    print('-' * 50)
-    print(mensagem)
-    print('-' * 50)
-    print('')
+    print(f'{cor_divisor}{'=' * 50}{reset}')
+    print(f'{cor_do_titulo}{mensagem.center(50, ' ')}{reset}')
+    print(f'{cor_divisor}{'=' * 50}{reset}')
+
+# MENSAGEM DE INFORMAÇÃO
+
+def mensagem_de_informacao(texto, cor, tipo_separador):
+    divisor = f"{C[cor]}"
+    cor_do_texto = f"{C['BOLD']}{C[cor]}"
+    reset = C['FIM']
+
+    print(f'\n{divisor}{tipo_separador * 50}{reset}')
+    print(f'{cor_do_texto}{texto}{reset}')
+    print(f'{divisor}{tipo_separador * 50}{reset}')
 
 # INPUT ESCOLHER OPÇÕES MENUS
 
@@ -37,13 +56,13 @@ def input_escolher_menu(opcoes):
         entrada = input('\nDigite a Opção Desejada: ').strip()
 
         if not entrada.isdigit():
-            mensagem_aviso('AVISO! Digite apenas números.')
+            mensagem_de_informacao('ERRO! Digite apenas números.', "VERMELHO", 'x')
             continue
 
         opcao = int(entrada)
 
         if opcao not in opcoes:
-            mensagem_aviso(f'AVISO! Opção Inválida! Escolha entre as opções: {list(opcoes)}')
+            mensagem_de_informacao(f'ATENÇÃO! Opção inválida! Escolha entre as opções: {list(opcoes)}', "AMARELO", '-')
             continue
 
         return opcao
@@ -56,7 +75,7 @@ def input_texto(mensagem):
 
         if texto: return texto
 
-        mensagem_aviso('AVISO! O campo é obrigatório.')
+        mensagem_de_informacao('ATENÇÃO! O campo é obrigatório.', "AMARELO", '-')
 
 # INPUT NUMERO INTEIRO
 
@@ -66,13 +85,13 @@ def input_inteiro(mensagem):
             numero = int(input_texto(mensagem))
 
             if numero < 0:
-                mensagem_aviso('AVISO! O valor deve ser maior ou igual a "0" zero.')
+                mensagem_de_informacao('ATENÇÃO! O valor deve ser maior ou igual a "0" zero.', "AMARELO", '-')
                 continue
 
             return numero
 
         except ValueError:
-            mensagem_aviso('AVISO! Infome apenas números.')
+            mensagem_de_informacao('ERRO! Infome apenas números.', "VERMELHO", 'x')
             continue
 
 # INPUT OPÇÃO DE CONFIRMAÇÃO "Sim" ou "Não" (S/N)
@@ -83,7 +102,7 @@ def input_sn(mensagem):
 
         if opcao_sn in ("s", "n"): return opcao_sn
 
-        mensagem_aviso('AVISO! Opção Inválida! Digite "S" para "Sim" ou "N" para "Não".')
+        mensagem_de_informacao('ATENÇÃO! Opção Inválida! Digite "S" para "Sim" ou "N" para "Não".', "AMARELO", '-')
 
 # INPUT CELULAR
 
@@ -94,13 +113,13 @@ def input_celular(mensagem):
         if len(celular) == 11 and celular.isdigit():
             return celular
 
-        mensagem_aviso('AVISO! Digite apenas números. Máx. 11 dígitos.')
+        mensagem_de_informacao('ERRO! Digite apenas números. Máx. 11 dígitos.', "VERMELHO", 'x')
 
 # VERIFICAR SE ALGO ESTÁ VAZIO
 
-def algo_esta_vazio(algo, texto):
-    if not algo:
-        opcao = input_sn(f'\nNenhum {texto} cadastrado. Deseja cadastrar agora (S/N)? ')
+def algo_esta_vazio(lista, nome):
+    if not lista:
+        opcao = input_sn(f'\nNenhum {nome} cadastrado. Deseja cadastrar agora (S/N)? ')
 
         return opcao
 
@@ -109,7 +128,7 @@ def algo_esta_vazio(algo, texto):
 def algo_ja_cadastrado(algo, local, texto):
     for a in local:
         if algo.lower() in a.nome.lower() and algo.lower() == a.nome.lower():
-            print(f'\n{texto} já cadastrado')
+            mensagem_de_informacao(f'ATENÇÃO! {texto} já cadastrado', "AMARELO", '-')
             pausar()
             return True
 
@@ -131,21 +150,24 @@ def alterar_item(
     opcoes,
     funcoes_alteracao
 ):
-    nome = input_texto(f'Digite o nome do {tipo}: ')
+    nome = input_texto(f'\nDigite o nome do {tipo}: ')
+    
     resultados = sistema.buscar_por_nome(lista, nome)
 
     if not resultados:
-        titulo_menu(f'RESULTADO DA BUSCA POR "{nome}":')
-        print(f'Nenhum {tipo} foi localizado.')
+        mensagem_de_informacao(f'ATENÇÃO! Nenhum {tipo} foi localizado.', "AMARELO", "-")
         pausar()
         return
 
+    limpar_terminal()
+
     titulo_menu(f'RESULTADO DA BUSCA POR "{nome}":')
     for obj in resultados:
-        print(obj)
+        print(f'\n{obj}')
 
     while True:
         id_obj = input_inteiro(f'\nDigite o ID do {tipo} que deseja alterar: ')
+
         obj = sistema.buscar_por_id(lista, id_obj)
 
         if obj and obj in resultados:
@@ -158,23 +180,23 @@ def alterar_item(
 
                 sistema.salvar_json(lista, caminho_arquivo)
 
-                mensagem_aviso(f'{tipo} atualizado com sucesso!')
+                mensagem_de_informacao(f'SUCESSO! {tipo} foi atualizado!', "VERDE", "-")
                 pausar()
                 return
 
             else:
-                print('\nOperação Cancelada.')
+                mensagem_de_informacao('ATENÇÃO! Operação cancelada!', "AMARELO", "-")
                 pausar()
                 return
 
-        mensagem_aviso('O ID informado não foi localizado!')
+        mensagem_de_informacao('ERRO! O ID informado não foi localizado!', "VERMELHO", "x")
 
         opcao_id = input_sn('\nDeseja informar outro ID (S/N)? ')
 
         if opcao_id == "s": continue
 
         if opcao_id == "n":
-            print('\nOperação Cancelada!')
+            mensagem_de_informacao('ATENÇÃO! Operação cancelada!', "AMARELO", "-")
             pausar()
             return
 
@@ -186,49 +208,47 @@ def excluir_item(
     tipo,
     caminho_arquivo
 ):
-    nome = input_texto(f'Digite o nome do {tipo}: ')
+    nome = input_texto(f'\nDigite o nome do {tipo}: ')
 
     resultados = sistema.buscar_por_nome(lista, nome)
 
     if not resultados:
-        titulo_menu(f'RESULTADO DA BUSCA POR "{nome}":')
-        print(f'Nenhum {tipo} foi localizado.')
+        mensagem_de_informacao(f'ATENÇÃO! Nenhum {tipo} foi localizado.', "AMARELO", "-")
         pausar()
         return
 
     titulo_menu(f'RESULTADO DA BUSCA POR "{nome}":')
     for obj in resultados:
-        print(obj)
+        print(f'\n{obj}')
 
     while True:
         id_obj = input_inteiro(f'\nDigite o ID do {tipo} que deseja excluir: ')
+
         obj = sistema.buscar_por_id(lista, id_obj)
 
         if obj and obj in resultados:
             opcao = input_sn(f'\nDeseja realmente excluir o {tipo} "{obj.nome}" (S/N)? ')
 
             if opcao == "n":
-                print('\nOperação Cancelada!')
+                mensagem_de_informacao('ATENÇÃO! Operação cancelada!', "AMARELO", "-")
                 pausar()
                 return
 
             lista.remove(obj)
-            
-            # sistema.remover_aluno(obj) if tipo == "Aluno" else sistema.remover_livro(obj)
 
             sistema.salvar_json(lista, caminho_arquivo)
 
-            mensagem_aviso(f'AVISO: O {tipo} {obj.nome} foi excluído!')
+            mensagem_de_informacao(f'SUCESSO! O {tipo} {obj.nome} foi excluído!', "VERDE", '-')
             pausar()
             return
 
-        mensagem_aviso('O ID informado não foi localizado!')
+        mensagem_de_informacao('ERRO! O ID informado não foi localizado!', "VERMELHO", "x")
 
         opcao_id = input_sn('\nDeseja informar outro ID (S/N)? ')
 
         if opcao_id == "s": continue
 
         if opcao_id == "n":
-            print('\nOperação Cancelada!')
+            mensagem_de_informacao('ATENÇÃO! Operação cancelada!', "AMARELO", "-")
             pausar()
             return

@@ -9,6 +9,8 @@ ARQUIVO_ALUNOS = os.path.join(DADOS_DIR, 'alunos.json')
 
 ARQUIVO_LIVROS = os.path.join(DADOS_DIR, 'livros.json')
 
+ARQUIVO_EMPRESTIMOS = os.path.join(DADOS_DIR, 'emprestimos.json')
+
 # CRIA ARQUIVO JSON
 
 def garantir_arquivo_json(caminho):

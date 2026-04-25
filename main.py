@@ -3,20 +3,26 @@ import utils.utils as u
 import models.sistema as sistema
 import services.funcoes_alunos as fa
 import services.funcoes_livros as fl
+import services.funcoes_emprestimos as fe
 
 # ========================================
 # PROGRAMA PRINCIPAL
 # ========================================
 
-# Criar sistema
+# Criar Sistema
 sistema = sistema.SistemaBiblioteca()
 
-# Carregar JSON Alunos e Livros
+# Carregar JSON Alunos e IDs
 sistema.alunos = fa.carregar_json_alunos()
 sistema.carregar_ids_aluno()
 
+# Carregar JSON Livros e IDs
 sistema.livros = fl.carregar_json_livros()
 sistema.carregar_ids_livro()
+
+# Carregar JSON Emprestados e IDs
+sistema.emprestimos = fe.carregar_json_emprestimos()
+sistema.carregar_ids_emprestimo()
 
 while True:
     # Menu Principal
@@ -78,9 +84,15 @@ while True:
             elif menu_livros == 0:
                 break
     
-    elif menu_principal == 3: ...
+    elif menu_principal == 3:
+        if not fl.verificar_cadastrar_livro(sistema): continue
 
-    elif menu_principal == 4: ...
+        fe.emprestar_livro(sistema)
+
+    elif menu_principal == 4:
+        if not fl.verificar_cadastrar_livro(sistema): continue
+
+        fe.listar_livros_emprestados(sistema)
 
     elif menu_principal == 5: ...
 

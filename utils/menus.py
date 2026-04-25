@@ -3,11 +3,10 @@ import utils.utils as u
 # MENU PRINCIPAL
 
 def menu_principal():
-    # Limpa Terminal
-    u.limpar_terminal()
+    #u.limpar_terminal()
 
     u.titulo_menu('SISTEMA DE BIBLIOTECA v4.0')
-    print('1 - Menu Alunos')
+    print('\n1 - Menu Alunos')
     print('2 - Menu Livros')
     print('3 - Emprestar Livro')
     print('4 - Livros Emprestados')
@@ -17,10 +16,10 @@ def menu_principal():
 # MENU ALUNOS
 
 def menu_alunos():
-    u.limpar_terminal()
+    #u.limpar_terminal()
 
     u.titulo_menu('MENU - ALUNOS')
-    print('1 - Cadastrar Aluno')
+    print('\n1 - Cadastrar Aluno')
     print('2 - Alterar Aluno')
     print('3 - Excluir Aluno')
     print('4 - Listar Alunos')
@@ -29,11 +28,10 @@ def menu_alunos():
 # MENU LIVROS
 
 def menu_livros():
-    # Limpa Terminal
-    u.limpar_terminal()
+    #u.limpar_terminal()
 
     u.titulo_menu('MENU - LIVROS')
-    print('1 - Cadastrar Livro')
+    print('\n1 - Cadastrar Livro')
     print('2 - Alterar Livro')
     print('3 - Excluir Livro')
     print('4 - Listar Livros')
@@ -42,16 +40,16 @@ def menu_livros():
 # MENU OPÇÕES DE ALTERAÇÃO ALUNO
 
 def menu_alterar_aluno(nome_aluno):
-    print(f'\nQuais dados deseja alterar do aluno "{nome_aluno}"?')
-    print('1 - Nome')
-    print('2 - Celular')
-    print('3 - E-Mail')
-    print('0 - Cancelar')
+    print(f'\nQuais dados deseja alterar do aluno "{nome_aluno}"?\n')
+    print('[1] - Nome')
+    print('[2] - Celular')
+    print('[3] - E-Mail')
+    print('[0] - Cancelar')
 
 # MENU OPÇÕES DE ALTERAÇÃO LIVRO
 
 def menu_alterar_livro(nome_livro):
-    print(f'\nQuais dados deseja alterar do livro "{nome_livro}"?')
-    print('1 - Nome')
-    print('2 - Quantidade')
-    print('0 - Cancelar')
+    print(f'\nQuais dados deseja alterar do livro "{nome_livro}"?\n')
+    print('[1] - Nome')
+    print('[2] - Quantidade')
+    print('[0] - Cancelar')
