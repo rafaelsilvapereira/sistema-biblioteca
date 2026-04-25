@@ -8,3 +8,4 @@ tabela_de_cores_terminal.py
 # Dados do Sistema
 dados/alunos.json
 dados/livros.json
+dados/emprestimos.json
