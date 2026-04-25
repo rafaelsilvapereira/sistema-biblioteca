@@ -3,6 +3,7 @@ __pycache__/
 venv/
 .env
 .vscode/
+tabela_de_cores_terminal.py
 
 # Dados do Sistema
 dados/alunos.json
