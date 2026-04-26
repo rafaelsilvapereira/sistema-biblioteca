@@ -32,11 +32,6 @@ def emprestar_livro(sistema):
         obj_livro = sistema.buscar_por_id(sistema.livros, id_livro)
 
         if obj_livro:
-            if obj_livro.status == "Indisponível":
-                u.mensagem_de_informacao(f'ATENÇÃO! O livro não está disponível para empréstimo', "AMARELO", "-")
-                u.pausar()
-                return
-            
             nome_aluno = u.input_texto('\nNome do Aluno: ')
 
             alunos_encontrados = sistema.buscar_por_nome(sistema.alunos, nome_aluno)
@@ -61,8 +56,15 @@ def emprestar_livro(sistema):
 
                     emprestimo = me.Emprestimo(id, obj_livro.nome, obj_aluno.nome)
 
-                    obj_livro.quantidade -= 1
-                    obj_livro.atualizar_status()
+                    if not obj_livro.emprestar():
+                        u.mensagem_de_informacao(
+                            'ATENÇÃO! O livro não está disponível para empréstimo',
+                            "AMARELO",
+                            "-"
+                        )
+                        u.pausar()
+                        return
+
                     sistema.salvar_json(sistema.livros, ARQUIVO_LIVROS)
 
                     sistema.adicionar_emprestimo(emprestimo)
@@ -86,10 +88,31 @@ def emprestar_livro(sistema):
 def listar_livros_emprestados(sistema):
     u.titulo_menu('LIVROS EMPRESTADOS:')
 
+    if not sistema.emprestimos:
+        u.mensagem_de_informacao('ATENÇÃO! Nenhum empréstimo realizado!', "AMARELO", "-")
+        u.pausar()
+        return
+
     for livro in sistema.emprestimos:
         print(f'\n{livro}')
 
     u.pausar()
+
+# VERIFICAR SE EXISTE EMPRÉSTIMO OU CADASTRAR EMPRÉSTIMO
+
+def verificar_cadastrar_emprestimo(sistema):
+    vazio = u.algo_esta_vazio(sistema.livros, "Empréstimo")
+
+    if vazio == "n":
+        u.mensagem_de_informacao('ATENÇÃO! Operação cancelada!', "AMARELO", "-")
+        u.pausar()
+        return False
+
+    if vazio == "s":
+        emprestar_livro(sistema)
+        return False
+
+    return True
 
 # CARREGAR LIVROS EMPRESTADOS JSON
 

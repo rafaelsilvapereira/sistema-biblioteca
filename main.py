@@ -90,8 +90,6 @@ while True:
         fe.emprestar_livro(sistema)
 
     elif menu_principal == 4:
-        if not fl.verificar_cadastrar_livro(sistema): continue
-
         fe.listar_livros_emprestados(sistema)
 
     elif menu_principal == 5: ...

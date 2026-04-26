@@ -19,13 +19,11 @@ def cadastrar_livro(sistema):
 
     if u.algo_ja_cadastrado(nome, sistema.livros, "Livro"): return
 
-    quantidade = u.input_inteiro('\nQuantidade: ')
+    estoque = u.input_inteiro('\nNº em Estoque: ')
 
     id = sistema.gerar_id_livro()
 
-    livro = ml.Livro(id, data_cadastro, nome, quantidade)
-
-    livro.atualizar_status()
+    livro = ml.Livro(id, data_cadastro, nome, estoque)
 
     sistema.adicionar_livro(livro)
 
@@ -53,8 +51,7 @@ def alterar_livro(sistema):
     funcoes = {
         1: lambda l: setattr(l, "nome", u.input_texto('\nNovo Nome: ')),
         2: lambda l: [
-            setattr(l, "quantidade", u.input_inteiro('\nNova Quantidade: ')),
-            l.atualizar_status()
+            setattr(l, "estoque", u.input_inteiro('\nNovo Estoque: ')),
         ]
     }
 
@@ -86,7 +83,7 @@ def verificar_cadastrar_livro(sistema):
     vazio = u.algo_esta_vazio(sistema.livros, "Livro")
 
     if vazio == "n":
-        print('\nOperação Cancelada!')
+        u.mensagem_de_informacao('ATENÇÃO! Operação cancelada!', "AMARELO", "-")
         u.pausar()
         return False
 

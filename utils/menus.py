@@ -51,5 +51,5 @@ def menu_alterar_aluno(nome_aluno):
 def menu_alterar_livro(nome_livro):
     print(f'\nQuais dados deseja alterar do livro "{nome_livro}"?\n')
     print('[1] - Nome')
-    print('[2] - Quantidade')
+    print('[2] - Estoque')
     print('[0] - Cancelar')

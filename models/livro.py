@@ -1,34 +1,49 @@
 # CLASSE LIVRO
 
 class Livro:
-    def __init__(self, id, data, nome, quantidade):
+    def __init__(self, id, data, nome, estoque):
         self.id = id
         self.data = data
         self.nome = nome
-        self.quantidade = quantidade
-        self.status = None
-        self.atualizar_status()
+        self.estoque = estoque
+        self.emprestado = 0
 
     def to_dict(self):
         return {
             "id": self.id,
             "data": self.data,
             "nome": self.nome,
-            "quantidade": self.quantidade,
-            "status": self.status
+            "estoque": self.estoque,
+            "emprestado": self.emprestado,
         }
-    
-    def atualizar_status(self):
-        self.status = "Indisponível" if self.quantidade == 0 else "Disponível"
-    
+
+    def emprestar(self):
+        if self.quantidade <= 0:
+            return False
+
+        self.emprestado += 1
+        return True
+
+    @property
+    def quantidade(self):
+        return self.estoque - self.emprestado
+
+    @property
+    def status(self):
+        return "Indisponível" if self.quantidade == 0 else "Disponível"
+
     @classmethod
     def from_dict(cls, dados):
-        return cls(
+        livro = cls(
             dados.get("id", 0),
             dados["data"],
             dados["nome"],
-            dados["quantidade"],
+            dados["estoque"],
         )
+
+        livro.emprestado = dados.get("emprestado", 0)
+
+        return livro
     
     def __str__(self):
         return (
@@ -36,6 +51,7 @@ class Livro:
             f'Data: {self.data}\n'
             f'Nome: {self.nome}\n'
             f'Quantidade: {self.quantidade}\n'
+            f'Emprestado: {self.emprestado}\n'
             f'Status: {self.status}\n'
             f'{"-" * 50}'
         )
